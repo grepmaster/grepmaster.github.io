@@ -1,0 +1,387 @@
+<html>
+<head>
+<title>Grepmaster: Substring Analog of Keyword Search</title>
+<meta name="description" content="Grepmaster: Substring Analog of Keyword Search" />
+<style type="text/css">
+html,body { font-size: 16; font-family:"Arial", monospace, sans-serif !important; max-width: 50em; }
+#wrapper{
+     position:absolute;
+     width:40em;
+     top:0%;
+     left:37%;
+     margin:0 0 0 -150px; }
+
+ul{ list-style-type: none }
+
+.mytab, .mytab TH { font-family:monospace, sans-serif; font-size:14pt; }
+.mytab, .mytab TD { font-family:monospace, sans-serif; font-size:14pt; }
+</style>
+</head>
+
+<div id="wrapper">
+
+<p style="font-size: 36">Grepmaster:<br>Substring Analog of Keyword Search</p>
+<br><br>
+
+<img src="basic.gif">
+
+<br><br><br><br><br><br><br><br>
+<span style="font-size: 30"><b>Introduction</b></span>
+
+<br><br><br><br>
+Search engines normally index words, not substrings. URLs or other kinds of data strings are less likely to be recalled completely than common words. Substring indexing guarantees all recalled strings are valid for searching, not only whole words.
+
+<br><br>
+Substring search is appropriate whenever information can be retrieved efficiently using non-word search strings. It may be the only way to find information when the recalled strings are not words.
+
+<br><br>
+Search engine indexes are not designed to accommodate substring search. Modifying the token analyzer to output n-grams instead of words multiplies the index size, impacting keyword search and indexing performance. Therefore we suggest implementing substring search as a separate subsystem, such as Grepmaster, optimized for the purpose.
+
+<br><br>
+Search engines typically employ a disk based index, enabling index size to exceed physical memory. A substring index should also be disk based to avoid capacity limitations and contain costs.
+
+<br><br>
+Research into disk based substring indexes is ongoing. Techniques in the literature suffer from extraordinary memory requirement, poor search performance, and low indexing rate. A more efficient index is needed.
+
+<br><br>
+Grepmaster establishes a new level of cost-performance:
+
+<br>
+<ol>
+<li>Search peak memory use is less than 5 MB, typically 2 MB.</li>
+<li>Indexing memory requirement is a fixed amount, by default 3.4 GB.</li>
+<li>Over 100 GB of indexed text is searchable at interactive rates on a single CPU core.</li>
+<li>Indexed substring search on disk outperforms linear search in memory by orders of magnitude, at one-third the cost.</li>
+<li>Index storage cost is roughly $2/GB of text.</li>
+<li>Maximum indexing rate on i5 2500k processor @3.3Ghz  is 36 MB/sec, or 129 GB per hour.</li>
+<li>No hard limit on index size except disk space.</li>
+</ol>
+
+<br><br><br><br><br><br><br><br>
+<span style="font-size: 30"><b>Untapped Potential of Substring Search</b></span>
+
+<br><br><br><br>
+For Grepmaster the term <i>substring search</i> means case insensitive exact string matching in a fixed size window.
+
+<br><br>
+User interaction patterns have shifted from passive media consumption toward keyword searching document collections. Due to high cost substring search has been left behind, mostly limited to matching visited URLs in the address bar of the web browser.
+
+<br><br>
+Substring searching large volumes of text is similar to searching in a text editor. URLs, unique identifiers, data strings, words, and combinations of them, are all candidates for ad hoc navigation.
+
+<br><br>
+Recall adapts to available means for search and retrieval. Having the ability to search any substring increases the likelihood that fragments of landmark strings will be recalled. It provides additional security that information can be accessed the most direct way, through the path of least resistance.
+
+<br><br>
+Substring search picks up where personal recall overtakes probabilistic keyword search.
+
+<br><br><br><br><br><br><br><br>
+<span style="font-size: 30"><b>Web Interface</b></span>
+
+<br><br><br><br>
+The web interface is a fusion of grep in a terminal, text viewing, and the standard one box search interface.
+
+<br><br>
+Grepmaster could  be integrated with the web front end of standard search, sharing the same input box, using a modal switch such as a special key.
+
+<br><br><br><br>
+<iframe width="546" height="410" src="https://www.youtube.com/embed/geGfH1ic2Sk" frameborder="0" allowfullscreen></iframe>
+
+<br><br><br><br><br><br><br><br>
+<span style="font-size: 30"><b>Disk Based Substring Index</b></span>
+
+<br><br><br><br>
+Disk based search performance is primarily limited by disk reading. For the same i/o cost, fewer reads with larger average size is faster than the the other way around.
+
+<br><br>
+Our strategy is to transfer the most burden from expensive resources, such as CPU or memory to the lowest cost resource, which is disk. We optimize for cost-performance rather than absolute performance.
+
+<br><br>
+The redundancy from indexing overlapping n-grams trades larger index size for greater locality of reference. Fewer reads and CPU cycles are needed to process queries than smaller high entropy indexes with more randomly distributed, or compressed, postings. Plus, indexes optimized for space efficiency may take up to one order of magnitude longer to build.
+
+<br><br>
+The final result is the disk based index outperforms by a large factor linear search in memory &mdash; at lower cost.
+
+<br><br>
+The cost of SSD is about 13X lower than DDR3 memory ($0.45/GB vs $6.00/GB).
+About 4.5X (1 text + 3.5 index) more space is required than linear search in memory.
+Therefore the media cost of the index is 4.5 / 13 = 35% of linear search in memory.
+
+<br><br>
+Grepmaster performs like a cluster for the price of an SSD.
+
+<br><br><br><br><br><br><br><br>
+<span style="font-size: 30"><b>Performance Tests</b></span>
+
+<br><br><br><br>
+One hundred selected queries are used to roughly characterize performance.
+
+<br><br>
+Summary:
+<ul>
+<li>Sample average indexed search rate after clearing disk cache is 83 GB/sec.</li>
+<li>Linear search rate in memory is 4672 MB/sec.</li>
+<li>Linear search rate on SSD is 536 MB/sec.</li>
+<li>&nbsp;</li>
+<li>Consequently, the disk based substring index gains roughly 17X the performance of linear search in memory and 155X the performance of linear search on SSD.</li>
+</ul>
+
+<br><br>
+Testing environment details and further explanations are in the [appendix].
+
+<br><br><br><br>
+<span style="font-size: 20"><b>1. Response Time</b></span>
+
+<br><br>
+The five data points are obtained by timing the batch of sample queries on 42 GB of Wikipedia articles duplicated 1 - 5 times, up to the capacity of our 1 TB SSD. Disk cache reduces the response time about one-third of a second for all sizes.
+
+<br><br>
+<img style="margin-left:-12%" src="time.png">
+
+<br><br><br><br><br><br><br><br>
+<span style="font-size: 20"><b>2. Search Rate</b></span>
+
+<br><br>
+Search rate is the data size divided by search time.
+
+<br><br>
+The following graph shows the sample distribution of search rate on a log(2) scale. Search rate with disk cache cleared is used as it is less dependent on environmental factors.
+
+<br><br>
+<img style="margin-left:-21%" src="rate.png">
+
+<br><br><br><br><br><br><br><br>
+<span style="font-size: 20"><b>3. Memory Use</b></span>
+
+<br><br>
+The following graph shows the distribution of peak memory use for the sample queries. The maximum value is 4.1 megabytes. Many commodity CPUs (such as our i5 2500k) have larger cache than the peak memory used.
+
+<br><br>
+<img style="margin-left:-21%" src="memory.png">
+
+<br><br><br><br><br><br><br><br>
+<span style="font-size: 30"><b>Indexing Procedure</b></span>
+
+<br><br><br><br>
+Indexing consists of the following steps, executed from a shell script:
+
+<br>
+<ol>
+<li>A Unix <i>find</i> command generates the list of documents to be processed.</li>
+<li>Output from step 1 is piped into a java/Apache Tika application which outputs document paths and contents into a UTF-8 encoded dump file.</li>
+<li>Indexer runs on the dump generated in step 2.</li>
+</ol>
+
+<br><br>The following link lists the document formats supported by Apache Tika:
+<br>https://tika.apache.org/1.6/formats.html
+
+<br><br>
+If a dump file exists the new (incremental) dump is merged with the old one.
+
+<br><br>
+Indexing is unicode aware. All code points are supported.
+
+<br><br><br><br><br><br><br><br>
+<span style="font-size: 30"><b>Roadmap</b></span>
+
+<br><br><br><br>
+Following is an outline of planned development.
+
+<br><br><br><br>
+<span style="font-size: 20"><b>1. Incremental Index Update</b></span>
+
+<br><br>
+Changes to document collections normally occur slowly. The index would be divided into independent blocks. Few blocks normally change over an update interval, so only a small fraction need rebuilding. When changes occur less frequently than the update interval the updates are nearly real time.
+
+<br><br>
+Suppose the block size is the default 1 GB, and one block changed over an update cycle. At a 29 MB/sec indexing rate it takes 36 seconds to rebuild the block and synchronize the index.
+
+<br><br><br><br>
+<span style="font-size: 20"><b>2. Data Reduction</b></span>
+
+<br><br>
+Grepmaster by default indexes everything, so existence or nonexistence of matching patterns is known with certainty. Data reduction could increase space efficiency, and improve search and indexing performance without compromising search-ability too much:
+
+<br>
+<ol>
+<li>Don't index words matching a user supplied stop word dictionary.</li>
+<li>Only index strings matching a specified regular expression, to filter out low value strings.</li>
+<li>Stop indexing after size-per-document limit is reached. Zero means only index the URI.</li>
+<li>Limit options 1-3 to specified filename patterns.</li>
+</ol>
+
+<br><br><br><br>
+<span style="font-size: 20"><b>3. Regular Expression Filtering</b></span>
+
+<br><br>
+We propose adding regular expression filtering to the query using <i>pipe</i> syntax:
+
+<br><br>
+<div style="text-align: center;">
+<span style="font-family:Courier, monospace;font-size:20;">abc 123 | [regex]</span>
+</div>
+
+<br><br><br><br>
+<span style="font-size: 20"><b>4. Columnar Indexing for Data Tables</b></span>
+
+<br><br>
+Grepmaster is able to index up to 64K separate fields. Files containing tabular data would have the columns separately indexed. By default patterns would match all columns, or use a positional syntax where commas indicate relative column position, such as: 
+
+<br><br>
+<div style="text-align: center;">
+<span style="font-family:Courier, monospace;font-size:20;">col1-pattern , , col3-pattern , col4-pattern</span>
+</div>
+
+<br><br><br><br>
+<span style="font-size: 20"><b>5. Compute Clustering</b></span>
+
+<br><br>
+Compute clustering reduces response time for large data sets. Multiple Grepmaster servers would host separate sections of the data. Queries would be sent to a cluster server which issues requests to the separate Grepmaster hosts, collects responses, and returns results merged together.
+
+<br><br>
+The main drawback is that it multiplies system cost. However if there is a need to interactively substring search terabytes of data, compute clustering would be an appropriate solution.
+
+<br><br><br><br><br><br><br><br>
+<span style="font-size: 30"><b>Summary</b></span>
+
+<br><br><br><br>
+Support for large scale substring search has been constrained by high cost relative to benefits. Grepmaster balances both sides of the equation.
+
+<br><br>
+Interactive substring search costs as little as the price of an SSD. However for more than occasional use, hosting on a dedicated system would be advisable.
+
+<br><br>
+The following capabilities were never before available in a commercial product:
+
+<br>
+<ol>
+<li>Disk based substring search with immediate feedback on 100+ GB data.</li>
+<li>Drill-down substring searches. Fields are independently indexed.</li>
+</ol>
+
+To be added soon:
+
+<br>
+<ol start="3">
+<li>Near real time update of the disk based substring index.</li>
+</ol>
+
+<br>
+All documents have varying amounts of non-word data, at least the URL. Grepmaster expands the scope of the classic search box from words to all of the data.
+
+<br><br>
+Significant time and money are invested deploying and maintaining search engines. Substring indexing further leverages the value of the data by making it comprehensively searchable.
+
+<br><br>
+With instant feedback substring search becomes a new kind of power tool for large scale information retrieval.
+
+
+<br><br><br><br><br><br><br><br>
+<span style="font-size: 30"><b>Appendix&mdash;Performance Testing Details</b></span>
+
+<br><br><br><br>
+Testing system components:
+
+<ol>
+<li>Intel i5 2500k @3.3 Ghz</li>
+<li>Asrock Z77 Pro4 motherboard</li>
+<li>Samsung 840 EVO 1 TB</li>
+<li>LSi 9207-8i Host Bus Adapter</li>
+<li>8 GB DDR3 1600 Mhz</li>
+</ol>
+
+OS is Ubuntu 12.04 64-bit with default kernel parameters.
+
+<br><br>
+Matching window is the default 500 characters.
+
+<br><br>
+Data source:
+<br>
+https://dumps.wikimedia.org/enwiki/20150602/enwiki-20150602-pages-articles.xml.bz2
+
+<br><br>
+Total size of articles extracted from wikipedia dump: 41771644776 bytes (42 GB)
+
+<br><br>
+The data recorded for sample queries on <a href="Wikipedia_X1-5.zip">Wikipedia X1&mdash;5</a>
+
+<br><br>
+GNU grep was recording suspiciously low search rates for SSD and memory. After some experimentation we found that a simpler memchr() based string matching is significantly faster than the deterministic finite automaton (DFA), at least for exact matching on recent Intel processors.
+
+<br><br>
+<p align="center">
+<table border class="mytab">
+<tr><th></th><th>SSD Search Rate MB/Sec</th><th>Memory Search Rate MB/Sec</th></tr>
+<tr><td>GNU Grep</td><td align="center">393</td><td align="center">1335</td></tr>
+<tr><td>memchr() based</td><td align="center">536</td><td align="center">4672</td></tr>
+</table>
+</p>
+
+<br><br>
+The STREAM benchmark reports 15,500 MB/sec memory bandwidth on our system. The memchr() based linear search rate is about one-third the memory bandwidth, while GNU grep is less than one-tenth.
+
+<br><br>
+The non-indexed search rates put the indexed search rates into perspective. Over one order of magnitude higher performance can be obtained for the price of disk space and indexing time.
+
+<br><br><br><br>
+<span class="indent" style="font-family: monospace; font-size: 16">
+<pre>
+// The following routine implements substring search based on the
+// memchr() builtin. It scans for the 1st character using the
+// native byte search machine instruction then compares the rest.
+// This simpleminded approach appears to trounce GNU grep's DFA
+// for exact matching on recent (ca 2011) Intel processors.
+//
+// The purpose of this exercise is to support our claim for 17X
+// performance gain of the disk based index vs linear search in
+// memory with accurate measurements.
+
+char *memchr_based_strnstr(char  *haystack,
+                           size_t haystack_len,
+                           char  *needle,
+                           size_t needle_len)
+{
+    char byte_1st, byte_2nd, *end, *needle_plus_2, needle_len_minus_2, *p;
+
+    if (needle_len > haystack_len)
+        return NULL;
+
+    byte_1st = needle[0];
+    byte_2nd = needle[1];
+
+    if (needle_len <= 2) {
+        // Search for 1st matching byte
+        if (!(p = memchr(haystack, byte_1st, haystack_len)))
+            return NULL;
+        // Check if 2nd byte doesn't match
+        if (needle_len == 2 && p[1] != byte_2nd)
+            return NULL;
+        return p;
+    }
+
+    needle_plus_2 = needle + 2;
+    needle_len_minus_2 = needle_len - 2;
+    end = haystack + haystack_len - needle_len;
+
+    for(p = haystack; p <= end;) {
+        // Search for 1st matching byte
+        if (!(p = memchr(p, byte_1st, end - p)))
+            return NULL;
+        else {
+            // Check if 2nd byte doesn't match
+            if (*++p != byte_2nd)
+                continue;
+            // Check if the remaining bytes match
+            else if (!memcmp(p + 1, needle_plus_2, needle_len_minus_2))
+                return p - 1;
+        }
+    }
+
+    return NULL;
+}
+</pre>
+</span>
+
+</div>
+</html>
