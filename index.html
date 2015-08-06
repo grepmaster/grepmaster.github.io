@@ -168,14 +168,11 @@ Indexing consists of the following steps, executed from a shell script:
 <br>
 <ol>
 <li>A Unix <i>find</i> command generates the list of documents to be processed.</li>
-<li>Output from step 1 is piped into a java/Apache Tika application which converts the documents and outputs paths and contents into a UTF-8 encoded dump file.</li>
+<li>Output from step 1 is piped into a java/<a href="https://tika.apache.org/1.6/formats.html">Apache Tika</a> application which converts the documents and outputs paths and contents into a UTF-8 encoded dump file.</li>
 <li>Indexer runs on the dump generated in step 2.</li>
 </ol>
 
-<br><br>
-<a href="https://tika.apache.org/1.6/formats.html">File formats supported by Apache Tika are listed here.</a>
-
-<br><br>
+<br>
 If a dump file exists the new (incremental) dump is merged with the old one.
 
 <br><br>
