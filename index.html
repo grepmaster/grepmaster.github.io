@@ -154,7 +154,7 @@ The following graph shows the sample distribution of search rate on a log(2) sca
 <span style="font-size: 20"><b>3. Memory Use</b></span>
 
 <br><br>
-The following graph shows the distribution of peak memory use for the sample queries. The maximum value is 4.1 megabytes. Many commodity CPUs (such as our i5 2500k) have larger cache than the peak memory used.
+The following graph shows the distribution of peak memory use for the sample queries. The maximum value is 4.1 megabytes. Many commodity CPUs (such as our <a href="http://www.cpu-world.com/CPUs/Core_i5/Intel-Core%20i5-2500K%20CM8062300833803.html" target="_blank">i5 2500k</a>) have larger cache than the peak memory used.
 
 <br><br>
 <img style="margin-left:-21%" src="memory.png">
@@ -167,7 +167,7 @@ Indexing consists of the following steps, executed from a shell script:
 
 <br>
 <ol>
-<li>A Unix <i>find</i> command generates the list of documents to be processed.</li>
+<li>A <a href="http://linux.die.net/man/1/find" target="_blank">find</a> command generates the list of documents to be processed.</li>
 <li>Output from step 1 is piped into a java/<a href="https://tika.apache.org/1.6/formats.html" target="_blank">Apache Tika</a> application which converts the documents and outputs paths and contents into a UTF-8 encoded dump file.</li>
 <li>Indexer runs on the dump generated in step 2.</li>
 </ol>
