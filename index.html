@@ -32,10 +32,10 @@ ul{ list-style-type: none }
 Search engines normally index words, not substrings. URLs or other kinds of data strings are less likely to be recalled completely than common words. Substring indexing guarantees all recalled strings are valid for searching, not only whole words.
 
 <br><br>
-Substring search is appropriate whenever information can be retrieved efficiently using non-word or <a href="http://www.enterprisesearchblog.com/2011/11/google-sometimes-i-really-do-want-exact-matches.html">very specific</a> search strings. It may be the only way to find information when the recalled strings are not words.
+Substring search is appropriate whenever information can be retrieved efficiently using non-word or <a href="http://www.enterprisesearchblog.com/2011/11/google-sometimes-i-really-do-want-exact-matches.html" target="_blank">very specific</a> search strings. It may be the only way to find information when the recalled strings are not words.
 
 <br><br>
-Search engine indexes are not designed to accommodate substring search. Modifying the token analyzer to <a href="https://github.com/sunspot/sunspot/wiki/Wildcard-searching-with-ngrams">output n-grams</a> instead of words multiplies the index size, impacting keyword search and indexing performance. Therefore we suggest implementing substring search as a separate subsystem, such as Grepmaster, optimized for the purpose.
+Search engine indexes are not designed to accommodate substring search. Modifying the token analyzer to <a href="https://github.com/sunspot/sunspot/wiki/Wildcard-searching-with-ngrams" target="_blank">output n-grams</a> instead of words multiplies the index size, impacting keyword search and indexing performance. Therefore we suggest implementing substring search as a separate subsystem, such as Grepmaster, optimized for the purpose.
 
 <br><br>
 Search engines typically employ a disk based index, enabling index size to exceed physical memory. A substring index should also be disk based to avoid capacity limitations and contain costs.
@@ -67,7 +67,7 @@ For Grepmaster the term <i>substring search</i> means case insensitive exact str
 User interaction patterns have shifted from passive media consumption toward keyword searching document collections. Due to high cost substring search has been left behind, mostly limited to matching visited URLs in the address bar of the web browser.
 
 <br><br>
-Substring searching large volumes of text is similar to searching in a text editor. URLs, unique identifiers, data strings, words, and combinations of them, are all candidates for ad hoc navigation.
+Substring searching large volumes of text is similar to <a href="http://i.stack.imgur.com/kHEwB.gif" target="_blank">incremental searching</a> <a href="http://usevim.com/2014/10/20/incsearch/" target="_blank">in a text editor</a>. URLs, unique identifiers, data strings, words, and combinations of them, are all candidates for ad hoc navigation.
 
 <br><br>
 Recall adapts to available means for search and retrieval. Having the ability to search any substring increases the likelihood that fragments of landmark strings will be recalled. It provides additional security that information can be accessed the most direct way, through the path of least resistance.
@@ -168,7 +168,7 @@ Indexing consists of the following steps, executed from a shell script:
 <br>
 <ol>
 <li>A Unix <i>find</i> command generates the list of documents to be processed.</li>
-<li>Output from step 1 is piped into a java/<a href="https://tika.apache.org/1.6/formats.html">Apache Tika</a> application which converts the documents and outputs paths and contents into a UTF-8 encoded dump file.</li>
+<li>Output from step 1 is piped into a java/<a href="https://tika.apache.org/1.6/formats.html" target="_blank">Apache Tika</a> application which converts the documents and outputs paths and contents into a UTF-8 encoded dump file.</li>
 <li>Indexer runs on the dump generated in step 2.</li>
 </ol>
 
