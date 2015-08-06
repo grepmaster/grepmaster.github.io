@@ -301,10 +301,10 @@ https://dumps.wikimedia.org/enwiki/20150602/enwiki-20150602-pages-articles.xml.b
 Total size of articles extracted from wikipedia dump: 41771644776 bytes (42 GB)
 
 <br><br>
-The data recorded for sample queries on <a href="Wikipedia_X1-5.zip">Wikipedia X1&mdash;5</a>
+<a href="Wikipedia_X1-5.zip">The data recorded for sample queries on Wikipedia X1&mdash;5.</a>
 
 <br><br>
-GNU grep was recording suspiciously low search rates for SSD and memory. After some experimentation we found that a simpler memchr() based string matching is significantly faster than the deterministic finite automaton (DFA), at least for exact matching on recent Intel processors.
+GNU grep had suspiciously low search rates for SSD and memory. After some experimentation we found that a simpler memchr() based string matching is significantly faster than the deterministic finite automaton (DFA), at least for exact matching on recent Intel processors.
 
 <br><br>
 <p align="center">
@@ -316,7 +316,7 @@ GNU grep was recording suspiciously low search rates for SSD and memory. After s
 </p>
 
 <br><br>
-The STREAM benchmark reports 15,500 MB/sec memory bandwidth on our system. The memchr() based linear search rate is about one-third the memory bandwidth, while GNU grep is less than one-tenth.
+The <a href="https://www.cs.virginia.edu/stream/" target="_blank">STREAM</a> benchmark reports 15,500 MB/sec memory bandwidth on our system. The memchr() based linear search rate is about one-third the memory bandwidth, while GNU grep is less than one-tenth.
 
 <br><br>
 The non-indexed search rates put the indexed search rates into perspective. Over one order of magnitude higher performance can be obtained for the price of disk space and indexing time.
