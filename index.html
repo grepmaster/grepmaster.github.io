@@ -97,7 +97,7 @@ Disk based search performance is primarily limited by disk reading. For the same
 Our strategy is to transfer the most burden from expensive resources, such as CPU or memory to the lowest cost resource, which is disk. We optimize for cost-performance rather than absolute performance.
 
 <br><br>
-The redundancy from indexing overlapping n-grams trades larger index size for greater locality of reference. Fewer reads and CPU cycles are needed to process queries than smaller high entropy indexes with more randomly distributed, or compressed, postings. Plus, indexes optimized for space efficiency may take up to one order of magnitude longer to build.
+The redundancy from indexing overlapping n-grams trades larger index size for greater locality of reference. Fewer reads and CPU cycles are needed to process queries than smaller high entropy indexes with more randomly distributed, or compressed, postings. Plus, indexes designed for space efficiency may take up to one order of magnitude longer to build.
 
 <br><br>
 The final result is the disk based index outperforms by a large factor linear search in memory &mdash; at lower cost.
@@ -176,7 +176,7 @@ Indexing consists of the following steps, executed from a shell script:
 If a dump file exists the new (incremental) dump is merged with the old one.
 
 <br><br>
-Indexing is unicode aware. All code points are supported.
+Indexing is Unicode aware. All code points are supported.
 
 <br><br><br><br><br><br><br><br>
 <span style="font-size: 30"><b>Roadmap</b></span>
@@ -191,7 +191,7 @@ Following is an outline of planned development.
 Changes to document collections normally occur slowly. The index would be divided into independent blocks. Few blocks normally change over an update interval, so only a small fraction need rebuilding. When changes occur less frequently than the update interval the updates are nearly real time.
 
 <br><br>
-Suppose the block size is the default 1 GB, and one block changed over an update cycle. At a 29 MB/sec indexing rate it takes 36 seconds to rebuild the block and synchronize the index.
+Suppose the block size is the default 1 GB, and one block changed over an update cycle. At a 29 MB/sec indexing rate it takes 35 seconds to rebuild the block and synchronize the index.
 
 <br><br><br><br>
 <span style="font-size: 20"><b>2. Data Reduction</b></span>
