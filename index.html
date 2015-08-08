@@ -97,7 +97,7 @@ Our strategy is to transfer the most burden from expensive resources, such as CP
 Disk based search performance is primarily limited by disk reading. For the same i/o cost, fewer reads with larger average size is faster than the the other way around.
 
 <br><br>
-The redundancy from indexing overlapping n-grams trades larger index size for greater locality of reference. Fewer reads and CPU cycles are needed to process queries than smaller high entropy indexes with more randomly distributed, or compressed, postings. Plus, indexes designed for space efficiency may take up to one order of magnitude longer to build.
+The redundancy from indexing overlapping n-grams trades larger index size for greater locality of reference. Fewer reads and CPU cycles are needed to process queries than smaller high entropy indexes with more randomly distributed, or compressed, postings. Plus, indexes designed for space efficiency may take one order of magnitude longer to build.
 
 <br><br>
 The final result is the disk based index outperforms by a large factor linear search in memory &mdash; at lower cost.
