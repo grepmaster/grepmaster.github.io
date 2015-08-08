@@ -35,7 +35,7 @@ Search engines normally index words, not substrings. URLs or other kinds of data
 Substring search is appropriate whenever information can be retrieved efficiently using non-word or <a href="http://www.enterprisesearchblog.com/2011/11/google-sometimes-i-really-do-want-exact-matches.html" target="_blank">very specific</a> search strings. It may be the only way to find information when the recalled strings are not words.
 
 <br><br>
-Search engine indexes are not designed to accommodate substring search. Modifying the token analyzer to <a href="https://github.com/sunspot/sunspot/wiki/Wildcard-searching-with-ngrams" target="_blank">output n-grams</a> instead of words multiplies the index size, impacting keyword search and indexing performance. Therefore we suggest implementing substring search as a separate subsystem, such as Grepmaster, optimized for the purpose.
+Search engine indexes are not designed to accommodate substring search. Modifying the token analyzer to <a href="https://github.com/sunspot/sunspot/wiki/Wildcard-searching-with-ngrams" target="_blank">output n-grams</a> instead of words multiplies the number of postings, impacting keyword search and indexing performance. Therefore we suggest implementing substring search as a separate subsystem, such as Grepmaster, optimized for the purpose.
 
 <br><br>
 Search engines typically employ a disk based index, enabling index size to exceed physical memory. A substring index should also be disk based to avoid capacity limitations and contain costs.
