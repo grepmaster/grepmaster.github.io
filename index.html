@@ -188,10 +188,10 @@ Following is an outline of planned development.
 <span style="font-size: 20"><b>1. Incremental Index Update</b></span>
 
 <br><br>
-Changes to document collections normally occur slowly. The index would be divided into independent blocks. Few blocks normally change over an update interval, so only a small fraction need rebuilding. When changes occur less frequently than the update interval the updates are nearly real time.
+Changes to document collections normally occur slowly. The index would be divided into independent sections. Few sections normally change over an update interval, so only a small fraction need rebuilding. When changes occur less frequently than the update interval the updates are nearly real time.
 
 <br><br>
-Suppose the block size is the default 1 GB, and one block changed over an update cycle. At a 29 MB/sec indexing rate it takes 35 seconds to rebuild the block and synchronize the index.
+Suppose the section size is the default 1 GB, and one section changed over an update cycle. At a 29 MB/sec indexing rate it takes 35 seconds to rebuild the section and synchronize the index.
 
 <br><br><br><br>
 <span style="font-size: 20"><b>2. Data Reduction</b></span>
