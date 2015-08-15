@@ -370,7 +370,7 @@ char *memchr_based_strnstr(char  *haystack,
             if (*++p != byte_2nd)
                 continue;
             // Check if the remaining bytes match
-            else if (!memcmp(p + 1, needle_plus_2, p - end))
+            else if (!memcmp(p + 1, needle_plus_2, end - p))
                 return p - 1;
         }
     }
