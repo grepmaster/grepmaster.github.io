@@ -340,6 +340,7 @@ char *memchr_based_strnstr(char  *haystack,
                            size_t needle_len)
 {
     char byte_1st, byte_2nd, *end, *needle_plus_2, *p;
+    size_t needle_len_minus_2;
 
     if (!needle_len || needle_len > haystack_len)
         return NULL;
@@ -358,6 +359,7 @@ char *memchr_based_strnstr(char  *haystack,
     }
 
     needle_plus_2 = needle + 2;
+    needle_len_minus_2 = needle_len - 2;
     end = haystack + haystack_len - needle_len;
     end_minus_2 = end - 2;
 
@@ -370,7 +372,7 @@ char *memchr_based_strnstr(char  *haystack,
             if (*++p != byte_2nd)
                 continue;
             // Check if the remaining bytes match
-            else if (!memcmp(p + 1, needle_plus_2, end - p))
+            else if (!memcmp(p + 1, needle_plus_2, needle_len_minus_2))
                 return p - 1;
         }
     }
